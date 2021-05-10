@@ -1,10 +1,6 @@
 {
   "name": "covid-patient-request",
-  "version": "1.0.0",
-  "engines": {
-    "node": "8.x.x",
-    "npm": "5.x.x"
-  },
+  "version": "1.0.1",
   "private": true,
   "description": "--",
   "scripts": {

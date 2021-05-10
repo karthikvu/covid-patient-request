@@ -71,7 +71,6 @@ if (process.env.NODE_ENV === 'production') {
  */
 const postgrator = require('postgrator')
 const { connectionString } = require('./lib/database')
-
 postgrator.setConfig({
   migrationDirectory: __dirname + '/postgrator',
   driver: 'pg',
@@ -79,6 +78,7 @@ postgrator.setConfig({
 })
 
 postgrator.migrate('max', (err, migrations) => {
+  console.log("Test")
   if (err) {
     console.error('Database migration failed!')
     console.error(err)
@@ -87,13 +87,12 @@ postgrator.migrate('max', (err, migrations) => {
 
   postgrator.endConnection(() => {
     console.log('Database migrated successfully.')
-
     /*
      * Database has been migrated, all is good to go!
      */
-    const port = process.env.PORT || 4000
-    app.listen(port, () => {
-      console.log(`Server listening at ${port}`)
-    })
   })
+})
+const port = process.env.PORT || 4000
+app.listen(port, () => {
+  console.log(`Server listening at ${port}`)
 })

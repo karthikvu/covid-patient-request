@@ -2,6 +2,7 @@ require('dotenv').config()
 
 const express = require('express')
 const morgan = require('morgan')
+var bodyParser = require('body-parser')
 
 const api = require('./api')
 
@@ -10,6 +11,11 @@ const app = express()
 /*
 * Log failed requests to stderr
 */
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
 app.use(
   morgan('tiny', {
     skip: (req, res) => res.statusCode < 400,
@@ -48,7 +54,7 @@ if (process.env.DYNO) {
 /*
  * Hook up all apis defined in /api
  */
-app.use(api)
+app.use("/api",api)
 
 /*
  * In production mode we will also serve the react-ui
@@ -69,30 +75,25 @@ if (process.env.NODE_ENV === 'production') {
 /*
  * Migrate database before listening for requests
  */
-const postgrator = require('postgrator')
+const Postgrator = require('postgrator')
 const { connectionString } = require('./lib/database')
-postgrator.setConfig({
-  migrationDirectory: __dirname + '/postgrator',
+const postgrator = new Postgrator({
+  migrationDirectory: __dirname + '/migrations',
   driver: 'pg',
   connectionString
 })
 
-postgrator.migrate('max', (err, migrations) => {
-  console.log("Test")
-  if (err) {
-    console.error('Database migration failed!')
-    console.error(err)
-    process.exit(1)
-  }
-
-  postgrator.endConnection(() => {
-    console.log('Database migrated successfully.')
-    /*
-     * Database has been migrated, all is good to go!
-     */
+postgrator
+  .migrate()
+  .then((appliedMigrations) => {
+    console.log(`Applied ${appliedMigrations.length} migrations. Starting server...`)
+    const port = process.env.PORT || 4000
+    app.listen(port, () => {
+      console.log(`Server listening at ${port}`)
+    })
   })
-})
-const port = process.env.PORT || 4000
-app.listen(port, () => {
-  console.log(`Server listening at ${port}`)
-})
+  .catch((error) => {
+    console.log('Unable to run migrations')
+    console.error(error)
+    process.exit(1)
+  })

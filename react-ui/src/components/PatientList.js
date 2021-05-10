@@ -24,7 +24,7 @@ const columns = [{
     key: 'phone'
 }, {
     label: 'Alt. Contact',
-    key: 'phonealt'
+    key: 'phoneAlt'
 }]  
 export const PatientList = ({rows = []}) => {
     return (

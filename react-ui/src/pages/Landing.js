@@ -1,4 +1,4 @@
-import { Button, makeStyles, TextField } from '@material-ui/core';
+import { Button, Link, makeStyles, TextField } from '@material-ui/core';
 import React, { useEffect, useState } from 'react'
 import {PatientList} from '../components/PatientList'
 import { getPatientInfo } from '../utils/api'
@@ -35,14 +35,16 @@ export const Landing = () => {
     }, [])
 
 return <div className={classes.root}>
-        <div id='#seacrh-action-box' className={classes.topBar}>
+        <div id='#search-action-box' className={classes.topBar}>
             <div className={classes.searchBarContainer}>  
                 <TextField size="small" className={classes.searchBar} id="outlined-basic" label="Search" variant="outlined" fullWidth onChange={(e) => setSearchText(e.target.value || "")}/>
             </div>
             <div className='action'>
-                <Button className={classes.button} variant="contained" size="medium" color="primary">
-                    Add new
-                </Button>
+                <Link href="form">
+                    <Button className={classes.button} variant="contained" size="medium" color="primary">
+                        Add new
+                    </Button>
+                </Link>
             </div>
         </div>
         <div id='#table-box'>
@@ -51,7 +53,7 @@ return <div className={classes.root}>
                 return item.buNumber.toLowerCase().includes(searchText.toLowerCase()) || 
                     item.name.toLowerCase().includes(searchText.toLowerCase()) || 
                     item.phone.toLowerCase().includes(searchText.toLowerCase()) ||
-                    item.phonealt.toLowerCase().includes(searchText.toLowerCase()) || 
+                    item.phoneAlt.toLowerCase().includes(searchText.toLowerCase()) || 
                     item.age == searchText ||
                     item.ngoName.toLowerCase().includes(searchText.toLowerCase()) 
             })}/>

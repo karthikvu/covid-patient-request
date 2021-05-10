@@ -80,7 +80,8 @@ const { connectionString } = require('./lib/database')
 const postgrator = new Postgrator({
   migrationDirectory: __dirname + '/migrations',
   driver: 'pg',
-  connectionString
+  connectionString,
+  ssl: true,
 })
 
 postgrator

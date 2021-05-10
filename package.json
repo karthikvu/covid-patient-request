@@ -1,47 +1,28 @@
 {
-  "name": "covid-patient-request",
-  "version": "0.1.0",
+  "name": "react-express-postgres-heroku",
+  "version": "1.0.0",
+  "engines": {
+    "node": "8.x.x",
+    "npm": "5.x.x"
+  },
   "private": true,
-  "author": {
-    "name": "Karthik VU",
-    "email": "karthik.vu@live.com"
-  },
-  "dependencies": {
-    "@material-ui/core": "^4.11.4",
-    "@material-ui/icons": "^4.11.2",
-    "@material-ui/styles": "^4.11.4",
-    "@testing-library/jest-dom": "^5.12.0",
-    "@testing-library/react": "^11.2.6",
-    "@testing-library/user-event": "^12.8.3",
-    "axios": "^0.21.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.3",
-    "web-vitals": "^1.1.2"
-  },
+  "description": "Create React App with Express API and Postgres in Heroku",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "postinstall":
+      "npm --prefix react-ui install && npm --prefix server install",
+    "start:dev":
+      "concurrently 'npm run --prefix react-ui start' 'npm run --prefix server start'",
+    "heroku-postbuild": "npm run --prefix react-ui build",
+    "start": "cd server && NODE_ENV=production node server.js"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "author": "Ari Autio <ari.autio@iki.fi>",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^3.5.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "cacheDirectories": [
+    "node_modules",
+    "react-ui/node_modules",
+    "server/node_modules"
+  ]
 }

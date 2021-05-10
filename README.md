@@ -1,70 +1,40 @@
-# Getting Started with Create React App
+A boilerplate for React with Express API and Postgres backends for easy development and Heroku deployments.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+You can see the boilerplate in action at https://react-express-postgres.herokuapp.com/
 
-## Available Scripts
+## What is included
 
-In the project directory, you can run:
+- NPM scripts for local development and [Heroku](https://devcenter.heroku.com/categories/nodejs) deployments 
+- [Create React App](https://github.com/facebookincubator/create-react-app]) in folder `react-ui`
+- [Express](https://expressjs.com/) API backend with request [logging](https://github.com/expressjs/morgan) in folder `server`
+- Postgres database access with [pg-promise](https://github.com/vitaly-t/pg-promise)
+- Database setup and migration with [postgrator](https://github.com/rickbergfalk/postgrator)
+- HTTPS only when deployed to Heroku
 
-### `npm start`
+## Local development
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Figure out your [connection string](https://github.com/iceddev/pg-connection-string) to your postgres instance. You'll need it at step `4`. Check https://postgresapp.com/ if you want to install Postgres to your Mac. 
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. `git clone https://github.com/aautio/react-express-postgres-heroku.git`
+2. `cd react-express-postgres-heroku`
+3. `npm install`
+4. `echo DATABASE_URL=postgres://someuser:somepassword@127.0.0.1:5432/somedatabase >> server/.env`  
+5. `npm run start:dev`
 
-### `npm test`
+Now you have the Create React App -app running in `http://localhost:3000/` and the API server running in `http://localhost:4000`. 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+CRA has a fabulous built-in live reload. Go and check their [readme](https://github.com/facebookincubator/create-react-app). The API server is reloading all changes with [nodemon](https://nodemon.io/). Whenever the server starts, it executes sql migrations from `server/postgrator` with [Postgrator](https://github.com/rickbergfalk/postgrator).
 
-### `npm run build`
+The CRA is proxying requests to API server. Check the `proxy` config from `react-ui/package.json` and the relevant [section in readme](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#proxying-api-requests-in-development).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Heroku deployments
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. `heroku create name-for-your-app`
+2. `heroku addons:create heroku-postgresql:hobby-dev`
+3. `heroku git:remote name-for-your-app`
+4. `git push heroku master`
 
-### `npm run eject`
+Now you have the software running in `https://name-for-your-app.herokuapps.com/`. It is running in production mode. Open your browser and check the logs with `heroku logs`.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Your database has been initialized by running sql migrations from `server/postgrator`.
